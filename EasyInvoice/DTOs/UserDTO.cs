@@ -4,13 +4,14 @@ namespace EasyInvoice.DTOs
 {
     public class UserDTO
     {
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Cell { get; set; }
         public decimal? DefaultFee { get; set; }
         public string Logo { get; set; }
+        public string Token { get; set; }
 
         public UserDTO(User user)
         {
