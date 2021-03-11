@@ -9,5 +9,6 @@ namespace BusinessLogic.Services
         User CreateNewUser(User user);
         User Authenticate(string email, string password);
         User GetById(int userId);
+        void DeleteUserById(int userId);
     }
 }

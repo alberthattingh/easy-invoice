@@ -83,5 +83,15 @@ namespace EasyInvoice.Controllers
             return Ok(new UserDTO(createdUser));
 
         }
+
+        [HttpDelete]
+        public ActionResult DeleteUser()
+        {
+            string userId = User?.Identity?.Name;
+            if (userId == null) return BadRequest("An error occurred. The user could not be deleted.");
+
+            UserService.DeleteUserById(int.Parse(userId));
+            return Ok();
+        }
     }
 }

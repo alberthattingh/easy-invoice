@@ -40,5 +40,13 @@ namespace Persistence.Repositories
             var user = Context.Set<User>().FirstOrDefault(u => u.UserId == userId);
             return user;
         }
+
+        public void DeleteUserById(int userId)
+        {
+            var user = GetUserById(userId);
+            
+            Context.Set<User>().Remove(user);
+            Context.SaveChanges();
+        }
     }
 }

@@ -26,6 +26,7 @@ namespace BusinessLogic.Services
                 throw new InvalidEmailException(user.Email);
             }
 
+            user.UserId = null;
             user.UserPassword = Hashing.HashPassword(user.UserPassword);
             return UsersRepository.CreateNewUser(user);
         }
@@ -47,6 +48,11 @@ namespace BusinessLogic.Services
         public User GetById(int userId)
         {
             return UsersRepository.GetUserById(userId);
+        }
+
+        public void DeleteUserById(int userId)
+        {
+            UsersRepository.DeleteUserById(userId);
         }
     }
 }
