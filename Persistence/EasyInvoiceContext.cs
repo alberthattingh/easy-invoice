@@ -13,6 +13,7 @@ namespace Persistence
         public DbSet<AccountDetails> AccountDetails { get; set; }
         public DbSet<StudentsPerInvoice> StudentsPerInvoices { get; set; }
         public DbSet<Qualification> Qualifications { get; set; }
+        public DbSet<Class> Classes { get; set; }
         
         public EasyInvoiceContext(DbContextOptions options) : base(options)
         {
@@ -29,6 +30,7 @@ namespace Persistence
             modelBuilder.ApplyConfiguration(new UserConfig());
             modelBuilder.ApplyConfiguration(new AccountDetailsConfig());
             modelBuilder.ApplyConfiguration(new StudentsPerInvoiceConfig());
+            modelBuilder.ApplyConfiguration(new ClassConfig());
         }
     }
 }

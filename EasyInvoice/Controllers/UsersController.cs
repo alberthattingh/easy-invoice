@@ -36,7 +36,7 @@ namespace EasyInvoice.Controllers
             var user = UserService.Authenticate(loginModel.Email, loginModel.Password);
 
             if (user == null)
-                return BadRequest("Email or password is incorrect");
+                return BadRequest("Email or password is incorrect.");
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
@@ -77,7 +77,7 @@ namespace EasyInvoice.Controllers
         public ActionResult<UserDTO> RegisterNewUser([FromBody] User user)
         {
             if (user.FirstName == null || user.LastName == null || user.UserPassword == null)
-                return BadRequest("One or more required fields were not supplied");
+                return BadRequest("One or more required fields were not supplied.");
             
             User createdUser = UserService.CreateNewUser(user);
             return Ok(new UserDTO(createdUser));

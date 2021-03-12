@@ -11,6 +11,7 @@ namespace BusinessLogic
         public static IServiceCollection AddBusinessLogic(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IUserService, UserService>();
+            serviceCollection.AddScoped<IStudentService, StudentService>();
             return serviceCollection;
         }
     }
