@@ -12,6 +12,8 @@ namespace BusinessLogic
         {
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IStudentService, StudentService>();
+            serviceCollection.AddScoped<ILessonService, LessonService>();
+            serviceCollection.AddScoped<IHashing, Hashing>();
             return serviceCollection;
         }
     }

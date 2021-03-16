@@ -1,17 +1,54 @@
-﻿using Persistence.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Persistence.Models;
 
 namespace Persistence.Repositories
 {
     public class LessonsRepository : ILessonsRepository
     {
-        public Lesson BookNewLesson(Lesson lessonDetails)
+        private readonly DbContext Context;
+
+        public LessonsRepository(DbContext context)
         {
-            throw new System.NotImplementedException();
+            Context = context;
         }
 
-        public void CancelLesson(int lessonId)
+        public Lesson GetLessonById(int lessonId)
         {
-            throw new System.NotImplementedException();
+            var lesson = Context.Set<Lesson>()
+                .Include(l => l.Student)
+                .Include(l => l.User)
+                .FirstOrDefault(l => l.LessonId == lessonId);
+            
+            return lesson;
+        }
+
+        public Lesson CreateNewLesson(Lesson lessonDetails)
+        {
+            lessonDetails.LessonId = null;
+
+            Context.Set<Lesson>().Add(lessonDetails);
+            Context.SaveChanges();
+
+            return lessonDetails;
+        }
+
+        public void DeleteLesson(int lessonId)
+        {
+            Lesson lesson = GetLessonById(lessonId);
+
+            Context.Set<Lesson>().Remove(lesson);
+            Context.SaveChanges();
+        }
+
+        public IList<Lesson> GetAllLessonsByTeacher(int teacherId)
+        {
+            var lessons = Context.Set<Lesson>()
+                .Include(l => l.Student)
+                .Where(l => l.UserId == teacherId);
+
+            return lessons.ToList();
         }
     }
 }

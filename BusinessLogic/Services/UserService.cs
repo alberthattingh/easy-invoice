@@ -8,10 +8,12 @@ namespace BusinessLogic.Services
     public class UserService : IUserService
     {
         private readonly IUsersRepository UsersRepository;
+        private readonly IHashing Hashing;
 
-        public UserService(IUsersRepository usersRepository)
+        public UserService(IUsersRepository usersRepository, IHashing hashing)
         {
             UsersRepository = usersRepository;
+            Hashing = hashing;
         }
 
         public IList<User> GetAllUsers()
