@@ -53,7 +53,7 @@ CREATE TABLE Students (
     LastName VARCHAR(50) NOT NULL,
     Email VARCHAR(320) NOT NULL,
     Cell VARCHAR(12) NULL,
-    FeePayable DECIMAL(18, 2) NOT NULL,,
+    FeePayable DECIMAL(18, 2) NOT NULL,
     
     PRIMARY KEY (StudentId),
     UNIQUE (Email)
