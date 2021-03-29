@@ -1,0 +1,66 @@
+
+CREATE TABLE Users (
+    UserId INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Email VARCHAR(320) UNIQUE NOT NULL,
+    UserPassword VARCHAR(100) NOT NULL,
+    Cell VARCHAR(12) NULL,
+    DefaultFee DECIMAL(18, 2) NULL,
+    Logo VARCHAR(100) NULL
+);
+
+CREATE TABLE AccountDetails (
+    AccountId INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    AccountType VARCHAR(50) NULL,
+    Bank VARCHAR(50) NOT NULL,
+    AccountHolder VARCHAR(50) NOT NULL,
+    AccountNumber VARCHAR(20) NOT NULL,
+    BranchCode VARCHAR(20) NULL,
+    PaymentInstruction VARCHAR(500) NULL
+);
+
+CREATE TABLE Qualifications (
+    QualificationId INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    Qualification VARCHAR(500) NOT NULL
+);
+
+CREATE TABLE Invoices (
+    InvoiceId INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    StartDate DATETIME2 NOT NULL,
+    EndDate DATETIME2 NOT NULL,
+    Total DECIMAL(18, 2) NOT NULL
+);
+
+CREATE TABLE Students (
+    StudentId INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Email VARCHAR(320) UNIQUE NOT NULL,
+    Cell VARCHAR(12) NULL,
+    FeePayable DECIMAL(18, 2) NOT NULL,
+);
+
+CREATE TABLE StudentsPerInvoice (
+    StudentGroupId INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+    InvoiceId INT NOT NULL FOREIGN KEY REFERENCES Invoices(InvoiceId),
+    StudentId INT NOT NULL FOREIGN KEY REFERENCES Students(StudentId)
+);
+
+CREATE TABLE Lessons (
+    LessonId INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    StudentId INT NOT NULL FOREIGN KEY REFERENCES Students(StudentId),
+    Duration DECIMAL(18, 2) NOT NULL,
+    LessonDate DATETIME2 NOT NULL
+);
+
+CREATE TABLE Classes (
+    ClassId INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    StudentId INT NOT NULL FOREIGN KEY REFERENCES Students(StudentId),
+    IsActive BIT NOT NULL
+);
