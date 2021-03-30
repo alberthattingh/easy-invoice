@@ -38,9 +38,24 @@ namespace EasyInvoice
             services.AddPersistence();
             services.AddBusinessLogic();
             
+            // Get environment information
+            Console.WriteLine("Environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            
             // Add database context for EF to use
-            services.AddDbContext<EasyInvoiceContext>(options =>
-                options.UseSqlServer(Configuration["ConnectionStrings:DbConnection"]));
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                services.AddDbContext<EasyInvoiceContext>(options =>
+                    options.UseSqlServer(Configuration["ConnectionStrings:DevConnection"]));
+            }
+            else
+            {
+                string mySqlConnectionStr = Configuration["ConnectionStrings:ProdConnection"];
+                services.AddDbContext<EasyInvoiceContext>(options => 
+                    options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
+                
+                // services.AddDbContext<EasyInvoiceContext>(options =>
+                //     options.UseMySql(Configuration["ConnectionStrings:ProdConnection"]));
+            }
             
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
