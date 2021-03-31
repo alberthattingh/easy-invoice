@@ -24,9 +24,14 @@ namespace EasyInvoice
 {
     public class Startup
     {
+        private readonly string CONNECTION_STRING;
+        private readonly string SECRET;
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            CONNECTION_STRING = Configuration["DB_CONNECTION"];
+            SECRET = Configuration["AUTH:SECRET"];
         }
 
         public IConfiguration Configuration { get; }
@@ -45,24 +50,21 @@ namespace EasyInvoice
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
                 services.AddDbContext<EasyInvoiceContext>(options =>
-                    options.UseSqlServer(Configuration["ConnectionStrings:DevConnection"]));
+                    options.UseSqlServer(CONNECTION_STRING));
             }
             else
             {
-                string mySqlConnectionStr = Configuration["ConnectionStrings:ProdConnection"];
                 services.AddDbContext<EasyInvoiceContext>(options => 
-                    options.UseMySql(mySqlConnectionStr, ServerVersion.AutoDetect(mySqlConnectionStr)));
-                
-                // services.AddDbContext<EasyInvoiceContext>(options =>
-                //     options.UseMySql(Configuration["ConnectionStrings:ProdConnection"]));
+                    options.UseMySql(CONNECTION_STRING, ServerVersion.AutoDetect(CONNECTION_STRING)));
             }
             
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            var authSection = Configuration.GetSection("AUTH");
+            services.Configure<AppSettings>(authSection);
             
             // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var appSettings = authSection.Get<AppSettings>();
+            // var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(SECRET ?? "");
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -75,7 +77,7 @@ namespace EasyInvoice
                         OnTokenValidated = context =>
                         {
                             var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                            var userId = int.Parse(context.Principal.Identity.Name);
+                            var userId = int.Parse(context.Principal?.Identity?.Name ?? "0");
                             var user = userService.GetById(userId);
                             if (user == null)
                             {
