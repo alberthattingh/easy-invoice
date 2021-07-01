@@ -42,6 +42,8 @@ namespace EasyInvoice
             // Add mappings from Interfaces to Classes for DI
             services.AddPersistence();
             services.AddBusinessLogic();
+            // Add DI support for Configuration to get secrets and env variables
+            services.AddSingleton<IConfiguration>(Configuration);
             
             // Get environment information
             Console.WriteLine("Environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));

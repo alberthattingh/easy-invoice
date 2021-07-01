@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Models;
@@ -47,6 +48,18 @@ namespace Persistence.Repositories
             var lessons = Context.Set<Lesson>()
                 .Include(l => l.Student)
                 .Where(l => l.UserId == teacherId);
+
+            return lessons.ToList();
+        }
+
+        public IList<Lesson> GetLessons(int[] studentIds, DateTime startDate, DateTime endDate, int userId)
+        {
+            var lessons = Context.Set<Lesson>()
+                .Include(l => l.Student)
+                .Where(l => l.UserId == userId)
+                .Where(l => studentIds.Contains(l.Student.StudentId))
+                .Where(l => l.LessonDate > startDate)
+                .Where(l => l.LessonDate < endDate);
 
             return lessons.ToList();
         }

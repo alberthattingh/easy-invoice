@@ -1,8 +1,6 @@
 ﻿using BusinessLogic.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Persistence;
-using Persistence.Repositories;
 
 namespace BusinessLogic
 {
@@ -13,6 +11,7 @@ namespace BusinessLogic
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IStudentService, StudentService>();
             serviceCollection.AddScoped<ILessonService, LessonService>();
+            serviceCollection.AddScoped<IInvoiceService, InvoiceService>();
             serviceCollection.AddScoped<IHashing, Hashing>();
             return serviceCollection;
         }

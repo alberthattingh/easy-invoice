@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Persistence.Models
 {
@@ -10,5 +11,6 @@ namespace Persistence.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal Total { get; set; }
+        public IList<Lesson> Lessons { get; set; }
     }
 }

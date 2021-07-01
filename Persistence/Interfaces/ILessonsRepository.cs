@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Persistence.Models;
 
 namespace Persistence.Repositories
@@ -9,5 +10,6 @@ namespace Persistence.Repositories
         Lesson CreateNewLesson(Lesson lessonDetails);
         void DeleteLesson(int lessonId);
         IList<Lesson> GetAllLessonsByTeacher(int teacherId);
+        IList<Lesson> GetLessons(int[] studentIds, DateTime startDate, DateTime endDate, int userId);
     }
 }
