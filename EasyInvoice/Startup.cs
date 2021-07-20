@@ -49,16 +49,8 @@ namespace EasyInvoice
             Console.WriteLine("Environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
             
             // Add database context for EF to use
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                services.AddDbContext<EasyInvoiceContext>(options =>
-                    options.UseSqlServer(CONNECTION_STRING));
-            }
-            else
-            {
-                services.AddDbContext<EasyInvoiceContext>(options => 
-                    options.UseMySql(CONNECTION_STRING, ServerVersion.AutoDetect(CONNECTION_STRING)));
-            }
+            services.AddDbContext<EasyInvoiceContext>(options => 
+                options.UseMySql(CONNECTION_STRING, ServerVersion.AutoDetect(CONNECTION_STRING)));
             
             var authSection = Configuration.GetSection("AUTH");
             services.Configure<AppSettings>(authSection);
