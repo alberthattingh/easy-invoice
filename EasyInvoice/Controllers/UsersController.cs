@@ -30,7 +30,7 @@ namespace EasyInvoice.Controllers
         }
         
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("Auth")]
         public ActionResult<UserDTO> Authenticate([FromBody] LoginDTO loginModel)
         {
             var user = UserService.Authenticate(loginModel.Email, loginModel.Password);

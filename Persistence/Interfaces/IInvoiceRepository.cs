@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using EasyInvoice.DTOs;
 using Persistence.Models;
 
 namespace Persistence.Repositories
@@ -8,6 +9,8 @@ namespace Persistence.Repositories
     public interface IInvoiceRepository
     {
         Invoice CreateNewInvoice(Invoice invoiceDetails, int[] studentIds);
-        IList<Invoice> GetAllIncoicesByTeacher(int teacherId);
+        IList<Invoice> GetAllInvoicesByTeacher(int teacherId);
+        Invoice GetInvoice(int invoiceId);
+        IList<Invoice> GetInvoices(InvoiceFilter filter);
     }
 }

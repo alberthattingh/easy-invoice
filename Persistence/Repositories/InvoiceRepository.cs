@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EasyInvoice.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Exceptions;
 using Persistence.Models;
@@ -53,9 +54,30 @@ namespace Persistence.Repositories
             return invoice;
         }
 
-        public IList<Invoice> GetAllIncoicesByTeacher(int teacherId)
+        public IList<Invoice> GetAllInvoicesByTeacher(int teacherId)
         {
             throw new System.NotImplementedException();
+        }
+
+        public Invoice GetInvoice(int invoiceId)
+        {
+            return Context.Set<Invoice>().FirstOrDefault((invoice) => invoice.InvoiceId == invoiceId);
+        }
+
+        public IList<Invoice> GetInvoices(InvoiceFilter filter)
+        {
+            var query = Context.Set<Invoice>().AsEnumerable();
+
+            if (filter.TeacherId != null)
+                query = query.Where((invoice) => invoice.UserId == filter.TeacherId);
+
+            if (filter.Start != null)
+                query = query.Where((invoice) => invoice.CreatedDate >= filter.Start);
+
+            if (filter.End != null)
+                query = query.Where((invoice) => invoice.CreatedDate <= filter.End);
+
+            return query.ToList();
         }
     }
 }

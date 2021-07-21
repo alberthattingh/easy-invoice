@@ -54,7 +54,7 @@ namespace EasyInvoice.Controllers
         }
 
         [HttpDelete]
-        [Route("{lessonId}")]
+        [Route("{lessonId:int}")]
         public ActionResult CancelLesson([FromRoute] int lessonId)
         {
             string userId = User?.Identity?.Name;

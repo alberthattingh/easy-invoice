@@ -12,5 +12,6 @@ namespace Persistence.Models
         public DateTime EndDate { get; set; }
         public decimal Total { get; set; }
         public IList<Lesson> Lessons { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

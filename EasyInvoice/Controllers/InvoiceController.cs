@@ -1,10 +1,12 @@
-﻿using BusinessLogic.Services;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BusinessLogic.Services;
 using EasyInvoice.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Exceptions;
 using Persistence.Models;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace EasyInvoice.Controllers
 {
@@ -21,6 +23,31 @@ namespace EasyInvoice.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InvoiceDTO))]
+        public ActionResult<IList<InvoiceDTO>> GetInvoices(InvoiceFilter filter)
+        {
+            string userId = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(userId))
+                return Forbid();
+
+            var invoices = InvoiceService.GetInvoices(filter);
+            return invoices.Select((invoice) => new InvoiceDTO(invoice)).ToList();
+        }
+
+        [HttpGet("{invoiceId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InvoiceDTO))]
+        public ActionResult<InvoiceDTO> GetInvoice(int invoiceId)
+        {
+            string userId = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(userId))
+                return Forbid();
+
+            InvoiceDTO invoice = new InvoiceDTO(InvoiceService.GetInvoice(invoiceId));
+            return Ok(invoice);
+        }
+
+        [HttpPost("New")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InvoiceDTO))]
         public ActionResult<InvoiceDTO> CreateNewInvoice(CreateInvoiceDTO invoiceDetails)
         {
             string userId = User?.Identity?.Name;

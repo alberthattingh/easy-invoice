@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasyInvoice.DTOs;
 
 namespace BusinessLogic.Services
 {
@@ -36,6 +37,16 @@ namespace BusinessLogic.Services
 
             invoice.Lessons = lessons;
             return invoice;
+        }
+
+        public Invoice GetInvoice(int invoiceId)
+        {
+            return InvoiceRepository.GetInvoice(invoiceId);
+        }
+
+        public IList<Invoice> GetInvoices(InvoiceFilter filter)
+        {
+            return InvoiceRepository.GetInvoices(filter);
         }
     }
 }
