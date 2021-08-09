@@ -32,7 +32,8 @@ namespace BusinessLogic.Services
                 StartDate = start,
                 EndDate = end,
                 UserId = int.Parse(userId),
-                Total = lessons.Sum(lesson => (decimal) lesson.Duration * (decimal) lesson.Student.FeePayable)
+                Total = lessons.Sum(lesson => (decimal) lesson.Duration * (decimal) lesson.Student.FeePayable),
+                CreatedDate = new DateTime()
             }, studentIds);
 
             invoice.Lessons = lessons;
