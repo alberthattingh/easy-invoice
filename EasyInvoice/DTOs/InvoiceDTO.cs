@@ -22,7 +22,9 @@ namespace EasyInvoice.DTOs
             StartDate = invoice.StartDate;
             EndDate = invoice.EndDate;
             Total = invoice.Total;
-            Lessons = invoice.Lessons.Select(lesson => new LessonDTO(lesson)).ToList();
+            
+            if (invoice.Lessons != null)
+                Lessons = invoice.Lessons.Select(lesson => new LessonDTO(lesson)).ToList();
         }
     }
 }
