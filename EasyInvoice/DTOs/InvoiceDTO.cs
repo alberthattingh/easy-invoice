@@ -13,6 +13,7 @@ namespace EasyInvoice.DTOs
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal Total { get; set; }
+        public DateTime CreatedDate { get; set; }
         public IList<LessonDTO> Lessons { get; set; }
 
         public InvoiceDTO(Invoice invoice)
@@ -22,6 +23,7 @@ namespace EasyInvoice.DTOs
             StartDate = invoice.StartDate;
             EndDate = invoice.EndDate;
             Total = invoice.Total;
+            CreatedDate = invoice.CreatedDate;
             
             if (invoice.Lessons != null)
                 Lessons = invoice.Lessons.Select(lesson => new LessonDTO(lesson)).ToList();
