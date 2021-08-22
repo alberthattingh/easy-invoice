@@ -11,5 +11,6 @@ namespace Persistence.Models
         public Student Student { get; set; }
         public decimal? Duration { get; set; }
         public DateTime? LessonDate { get; set; }
+        public int? InvoiceId { get; set; }
     }
 }

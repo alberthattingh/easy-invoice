@@ -24,7 +24,9 @@ namespace Persistence.Repositories
                 StartDate = invoiceDetails.StartDate,
                 EndDate = invoiceDetails.EndDate,
                 UserId = invoiceDetails.UserId,
-                Total = invoiceDetails.Total
+                Total = invoiceDetails.Total,
+                CreatedDate = invoiceDetails.CreatedDate,
+                Lessons = invoiceDetails.Lessons
             };
 
             Context.Set<Invoice>().Add(invoice);
@@ -61,12 +63,18 @@ namespace Persistence.Repositories
 
         public Invoice GetInvoice(int invoiceId)
         {
-            return Context.Set<Invoice>().FirstOrDefault((invoice) => invoice.InvoiceId == invoiceId);
+            return Context.Set<Invoice>()
+                .Include(i => i.Lessons)
+                .ThenInclude(l => l.Student)
+                .FirstOrDefault((invoice) => invoice.InvoiceId == invoiceId);
         }
 
         public IList<Invoice> GetInvoices(InvoiceFilter filter)
         {
-            var query = Context.Set<Invoice>().AsEnumerable();
+            var query = Context.Set<Invoice>()
+                .Include(i => i.Lessons)
+                .ThenInclude(l => l.Student)
+                .AsEnumerable();
 
             if (filter.TeacherId != null)
                 query = query.Where((invoice) => invoice.UserId == filter.TeacherId);

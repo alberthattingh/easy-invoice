@@ -14,8 +14,6 @@ namespace Persistence.ModelConfig
             builder.Property(invoice => invoice.Total)
                 .HasColumnType("decimal(18, 2)");
 
-            builder.Ignore(invoice => invoice.Lessons);
-
             builder.Property(invoice => invoice.CreatedDate)
                 .IsRequired();
         }

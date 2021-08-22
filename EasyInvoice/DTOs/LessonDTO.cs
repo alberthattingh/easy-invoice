@@ -11,6 +11,7 @@ namespace EasyInvoice.DTOs
         public StudentDTO Student { get; set; }
         public decimal? Duration { get; set; }
         public DateTime? LessonDate { get; set; }
+        public int? InvoiceId { get; set; }
 
         public LessonDTO(Lesson entity)
         {
@@ -19,6 +20,7 @@ namespace EasyInvoice.DTOs
             StudentId = entity.StudentId;
             Duration = entity.Duration;
             LessonDate = entity.LessonDate;
+            InvoiceId = entity.InvoiceId;
 
             if (entity.Student != null)
                 Student = new StudentDTO(entity.Student);

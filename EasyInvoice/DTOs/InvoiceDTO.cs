@@ -10,6 +10,7 @@ namespace EasyInvoice.DTOs
     {
         public int InvoiceId { get; set; }
         public int UserId { get; set; }
+        public UserDTO User { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal Total { get; set; }
@@ -24,7 +25,10 @@ namespace EasyInvoice.DTOs
             EndDate = invoice.EndDate;
             Total = invoice.Total;
             CreatedDate = invoice.CreatedDate;
-            
+
+            if (invoice.User != null)
+                User = new UserDTO(invoice.User);
+
             if (invoice.Lessons != null)
                 Lessons = invoice.Lessons.Select(lesson => new LessonDTO(lesson)).ToList();
         }
