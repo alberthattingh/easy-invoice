@@ -56,7 +56,7 @@ namespace EasyInvoice.Controllers
             return Ok(dto);
         }
 
-        [HttpDelete("/{studentId}")]
+        [HttpDelete("{studentId}")]
         public ActionResult DeleteStudent(int studentId)
         {
             string userId = User?.Identity?.Name;
