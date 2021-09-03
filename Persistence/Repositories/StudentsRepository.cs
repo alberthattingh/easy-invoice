@@ -17,7 +17,7 @@ namespace Persistence.Repositories
         public IList<Student> GetAllStudentsByTeacher(int teacherId)
         {
             var students = Context.Set<Class>()
-                .Where(c => c.UserId == teacherId)
+                .Where(c => c.UserId == teacherId && c.IsActive)
                 .Include(c => c.Student)
                 .Select(c => c.Student);
 
@@ -37,9 +37,27 @@ namespace Persistence.Repositories
             throw new System.NotImplementedException();
         }
 
-        public void DeregisterStudentFromClass(int studentId, int teacherId)
+        public bool RemoveStudent(int studentId, int userId)
         {
-            throw new System.NotImplementedException();
+            var studentClass = Context.Set<Class>()
+                .FirstOrDefault(c => c.StudentId == studentId && c.UserId == userId);
+
+            if (studentClass == default) return false;
+            
+            studentClass.IsActive = false;
+            Context.Set<Class>().Update(studentClass);
+            Context.SaveChanges();
+            return true;
+        }
+
+        public Student GetStudentById(int studentId, int userId)
+        {
+            var student = Context.Set<Class>()
+                .Include(c => c.Student)
+                .FirstOrDefault(c => c.StudentId == studentId && c.UserId == userId && c.IsActive)
+                ?.Student;
+
+            return student;
         }
     }
 }

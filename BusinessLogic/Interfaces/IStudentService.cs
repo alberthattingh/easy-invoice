@@ -7,5 +7,6 @@ namespace BusinessLogic.Services
     {
         IList<Student> GetAllStudentsByTeacher(int teacherId);
         Student AddStudentToClassList(Student student, int teacherId);
+        bool DeleteStudent(int studentId, int userId);
     }
 }

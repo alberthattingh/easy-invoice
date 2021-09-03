@@ -55,5 +55,16 @@ namespace EasyInvoice.Controllers
 
             return Ok(dto);
         }
+
+        [HttpDelete("/{studentId}")]
+        public ActionResult DeleteStudent(int studentId)
+        {
+            string userId = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(userId))
+                return Forbid();
+            
+            var deleted = StudentService.DeleteStudent(studentId, int.Parse(userId));
+            return deleted ? Ok() : NotFound();
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace Persistence.Repositories
         IList<Student> GetAllStudentsByTeacher(int teacherId);
         Student CreateNewStudent(Student student);
         Student UpdateStudentDetails(int studentId, Student updatedStudentDetails);
-        void DeregisterStudentFromClass(int studentId, int teacherId);
+        bool RemoveStudent(int studentId, int userId);
+        Student GetStudentById(int studentId, int userId);
     }
 }

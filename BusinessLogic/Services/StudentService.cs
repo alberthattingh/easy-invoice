@@ -28,5 +28,10 @@ namespace BusinessLogic.Services
 
             return createdStudent;
         }
+
+        public bool DeleteStudent(int studentId, int userId)
+        {
+            return StudentsRepository.RemoveStudent(studentId, userId);
+        }
     }
 }
