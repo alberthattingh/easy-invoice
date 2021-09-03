@@ -87,5 +87,18 @@ namespace Persistence.Repositories
 
             return query.ToList();
         }
+
+        public IList<Invoice> GetRecentInvoices(int userId, int skip, int take)
+        {
+            var invoices = Context.Set<Invoice>()
+                .Include(i => i.Lessons)
+                .ThenInclude(l => l.Student)
+                .Where(i => i.UserId == userId)
+                .OrderByDescending(i => i.CreatedDate)
+                .Skip(skip)
+                .Take(take);
+
+            return invoices.ToList();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Persistence.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,6 @@ namespace BusinessLogic.Services
         Invoice CreateNewInvoice(int[] studentIds, DateTime? startDate, DateTime? endDate, string userId);
         Invoice GetInvoice(int invoiceId);
         IList<Invoice> GetInvoices(InvoiceFilter filter);
+        IList<Invoice> GetRecentInvoices(int userId, int skip, int take);
     }
 }

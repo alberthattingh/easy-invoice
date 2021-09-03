@@ -3,8 +3,6 @@ using Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EasyInvoice.DTOs;
 
 namespace BusinessLogic.Services
@@ -48,6 +46,11 @@ namespace BusinessLogic.Services
         public IList<Invoice> GetInvoices(InvoiceFilter filter)
         {
             return InvoiceRepository.GetInvoices(filter);
+        }
+
+        public IList<Invoice> GetRecentInvoices(int userId, int skip, int take)
+        {
+            return InvoiceRepository.GetRecentInvoices(userId, skip, take);
         }
     }
 }

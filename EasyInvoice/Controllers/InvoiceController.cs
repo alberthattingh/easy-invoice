@@ -46,6 +46,18 @@ namespace EasyInvoice.Controllers
             return Ok(invoice);
         }
 
+        [HttpPost("Recent")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InvoiceDTO))]
+        public ActionResult<IList<InvoiceDTO>> GetRecentInvoices(SkipTake skipTake)
+        {
+            string userId = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(userId))
+                return Forbid();
+
+            var invoices = InvoiceService.GetRecentInvoices(int.Parse(userId), skipTake.Skip, skipTake.Take);
+            return invoices.Select((invoice) => new InvoiceDTO(invoice)).ToList();
+        }
+
         [HttpPost("New")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InvoiceDTO))]
         public ActionResult<InvoiceDTO> CreateNewInvoice(CreateInvoiceDTO invoiceDetails)

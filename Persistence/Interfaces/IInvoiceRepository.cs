@@ -12,5 +12,6 @@ namespace Persistence.Repositories
         IList<Invoice> GetAllInvoicesByTeacher(int teacherId);
         Invoice GetInvoice(int invoiceId);
         IList<Invoice> GetInvoices(InvoiceFilter filter);
+        IList<Invoice> GetRecentInvoices(int userId, int skip, int take);
     }
 }
