@@ -10,5 +10,6 @@ namespace Persistence.Repositories
         User GetUserByEmail(string email);
         User GetUserById(int userId);
         void DeleteUserById(int userId);
+        User UpdateUser(User updatedUser);
     }
 }

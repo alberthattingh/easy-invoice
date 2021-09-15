@@ -10,6 +10,10 @@ namespace Persistence.ModelConfig
         {
             builder.ToTable("AccountDetails")
                 .HasKey(account => account.AccountId);
+
+            builder.Property(account => account.IsActive)
+                .IsRequired()
+                .HasDefaultValue(false);
         }
     }
 }

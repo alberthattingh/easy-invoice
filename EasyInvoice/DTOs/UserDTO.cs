@@ -1,4 +1,6 @@
-﻿using Persistence.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Persistence.Models;
 
 namespace EasyInvoice.DTOs
 {
@@ -12,6 +14,7 @@ namespace EasyInvoice.DTOs
         public decimal? DefaultFee { get; set; }
         public string Logo { get; set; }
         public string Token { get; set; }
+        public IList<BankingDetailsDto> BankingDetails { get; set; }
 
         public UserDTO(User user)
         {
@@ -22,6 +25,11 @@ namespace EasyInvoice.DTOs
             Cell = user.Cell;
             DefaultFee = user.DefaultFee;
             Logo = user.Logo;
+
+            if (user.AccountDetails != null && user.AccountDetails.Any())
+                BankingDetails = user.AccountDetails
+                    .Select(account => new BankingDetailsDto(account))
+                    .ToList();
         }
     }
 }

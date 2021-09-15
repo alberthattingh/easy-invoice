@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Exceptions;
 using Persistence.Models;
 
 namespace Persistence.Repositories
@@ -37,7 +38,9 @@ namespace Persistence.Repositories
 
         public User GetUserById(int userId)
         {
-            var user = Context.Set<User>().FirstOrDefault(u => u.UserId == userId);
+            var user = Context.Set<User>()
+                .Include(u => u.AccountDetails)
+                .FirstOrDefault(u => u.UserId == userId);
             return user;
         }
 
@@ -47,6 +50,39 @@ namespace Persistence.Repositories
             
             Context.Set<User>().Remove(user);
             Context.SaveChanges();
+        }
+
+        public User UpdateUser(User updatedUser)
+        {
+            if (updatedUser.UserId == default) throw new UserNotFoundException();
+            var user = GetUserById((int) updatedUser.UserId);
+            
+            user.FirstName = updatedUser.FirstName;
+            user.LastName = updatedUser.LastName;
+            user.Cell = updatedUser.Cell;
+            user.Email = updatedUser.Email;
+            user.Logo = updatedUser.Logo;
+            user.DefaultFee = updatedUser.DefaultFee;
+
+            if (updatedUser.AccountDetails != null && updatedUser.AccountDetails.Any())
+            {
+                if (user.AccountDetails == null)
+                {
+                    user.AccountDetails = updatedUser.AccountDetails;
+                }
+                else
+                {
+                    foreach (var account in user.AccountDetails)
+                        account.IsActive = false;
+                    
+                    user.AccountDetails.Add(updatedUser.AccountDetails.First());
+                }
+            }
+
+            Context.Set<User>().Update(user);
+            Context.SaveChanges();
+
+            return user;
         }
     }
 }

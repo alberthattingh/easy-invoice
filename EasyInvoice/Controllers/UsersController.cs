@@ -84,6 +84,16 @@ namespace EasyInvoice.Controllers
 
         }
 
+        [HttpPut]
+        public ActionResult<UserDTO> UpdateUserDetails([FromBody] User user)
+        {
+            string userId = User?.Identity?.Name;
+            if (userId == null) return BadRequest("An error occurred. The user could not be updated.");
+
+            User updated = UserService.UpdateUserDetails(user, int.Parse(userId));
+            return Ok(new UserDTO(updated));
+        }
+
         [HttpDelete]
         public ActionResult DeleteUser()
         {

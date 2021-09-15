@@ -11,5 +11,6 @@
         public string AccountNumber { get; set; }
         public string BranchCode { get; set; }
         public string PaymentInstruction { get; set; }
+        public bool IsActive { get; set; }
     }
 }

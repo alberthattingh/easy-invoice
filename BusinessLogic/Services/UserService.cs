@@ -56,5 +56,11 @@ namespace BusinessLogic.Services
         {
             UsersRepository.DeleteUserById(userId);
         }
+
+        public User UpdateUserDetails(User user, int userId)
+        {
+            user.UserId = userId;
+            return UsersRepository.UpdateUser(user);
+        }
     }
 }
