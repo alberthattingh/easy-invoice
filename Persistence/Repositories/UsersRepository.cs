@@ -32,7 +32,9 @@ namespace Persistence.Repositories
 
         public User GetUserByEmail(string email)
         {
-            var user = Context.Set<User>().FirstOrDefault(u => u.Email == email);
+            var user = Context.Set<User>()
+                .Include(u => u.AccountDetails)
+                .FirstOrDefault(u => u.Email == email);
             return user;
         }
 
