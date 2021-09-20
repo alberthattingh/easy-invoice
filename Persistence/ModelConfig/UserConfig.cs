@@ -13,6 +13,14 @@ namespace Persistence.ModelConfig
 
             builder.Property(user => user.DefaultFee)
                 .HasColumnType("decimal(18, 2)");
+
+            builder.Property(user => user.LogoUrl)
+                .HasMaxLength(500);
+            
+            builder.Property(user => user.LogoName)
+                .HasMaxLength(255);
+
+            builder.Ignore(user => user.LogoImage);
         }
     }
 }

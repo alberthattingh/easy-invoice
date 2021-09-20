@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Persistence.Models;
 
 namespace EasyInvoice.DTOs
@@ -12,7 +13,8 @@ namespace EasyInvoice.DTOs
         public string Email { get; set; }
         public string Cell { get; set; }
         public decimal? DefaultFee { get; set; }
-        public string Logo { get; set; }
+        public string LogoUrl { get; set; }
+        public string LogoName { get; set; }
         public string Token { get; set; }
         public IList<BankingDetailsDto> BankingDetails { get; set; }
 
@@ -24,7 +26,8 @@ namespace EasyInvoice.DTOs
             Email = user.Email;
             Cell = user.Cell;
             DefaultFee = user.DefaultFee;
-            Logo = user.Logo;
+            LogoUrl = user.LogoUrl;
+            LogoName = user.LogoName;
 
             if (user.AccountDetails != null && user.AccountDetails.Any())
                 BankingDetails = user.AccountDetails

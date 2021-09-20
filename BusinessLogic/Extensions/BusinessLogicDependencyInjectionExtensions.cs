@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BusinessLogic
+namespace BusinessLogic.Extensions
 {
     public static class BusinessLogicDependencyInjectionExtensions
     {
@@ -13,6 +13,7 @@ namespace BusinessLogic
             serviceCollection.AddScoped<ILessonService, LessonService>();
             serviceCollection.AddScoped<IInvoiceService, InvoiceService>();
             serviceCollection.AddScoped<IHashing, Hashing>();
+            serviceCollection.AddScoped<ICloudStorage, GoogleCloudStorage>();
             return serviceCollection;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace Persistence.Models
 {
@@ -12,6 +13,8 @@ namespace Persistence.Models
         public string Cell { get; set; }
         public decimal? DefaultFee { get; set; }
         public IList<AccountDetails> AccountDetails { get; set; }
-        public string Logo { get; set; }
+        public string LogoUrl { get; set; }
+        public string LogoName { get; set; }
+        public IFormFile LogoImage { get; set; }
     }
 }

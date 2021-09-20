@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
+using BusinessLogic.Helpers;
 using BusinessLogic.Services;
 using EasyInvoice.DTOs;
-using EasyInvoice.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +30,7 @@ namespace EasyInvoice.Controllers
             UserService = userService;
             AppSettings = appSettings.Value;
         }
-        
+
         [AllowAnonymous]
         [HttpPost("Auth")]
         public ActionResult<UserDTO> Authenticate([FromBody] LoginDTO loginModel)
@@ -39,7 +41,7 @@ namespace EasyInvoice.Controllers
                 return BadRequest("Email or password is incorrect.");
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(AppSettings.JwtToken);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -47,7 +49,8 @@ namespace EasyInvoice.Controllers
                     new Claim(ClaimTypes.Name, user.UserId.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
@@ -68,7 +71,7 @@ namespace EasyInvoice.Controllers
             {
                 userDtos.Add(new UserDTO(entity));
             }
-            
+
             return Ok(userDtos);
         }
 
@@ -78,19 +81,18 @@ namespace EasyInvoice.Controllers
         {
             if (user.FirstName == null || user.LastName == null || user.UserPassword == null)
                 return BadRequest("One or more required fields were not supplied.");
-            
+
             User createdUser = UserService.CreateNewUser(user);
             return Ok(new UserDTO(createdUser));
-
         }
 
         [HttpPut]
-        public ActionResult<UserDTO> UpdateUserDetails([FromBody] User user)
+        public async Task<ActionResult<UserDTO>> UpdateUserDetails([FromForm] User user)
         {
             string userId = User?.Identity?.Name;
             if (userId == null) return BadRequest("An error occurred. The user could not be updated.");
 
-            User updated = UserService.UpdateUserDetails(user, int.Parse(userId));
+            User updated = await UserService.UpdateUserDetails(user, int.Parse(userId));
             return Ok(new UserDTO(updated));
         }
 
@@ -102,6 +104,23 @@ namespace EasyInvoice.Controllers
 
             UserService.DeleteUserById(int.Parse(userId));
             return Ok();
+        }
+
+        [HttpGet("Logo")]
+        public async Task<ActionResult> GetLogo()
+        {
+            string userId = User?.Identity?.Name;
+            if (userId == null) return BadRequest("An error occurred. The user could not be authenticated.");
+
+            var path = await UserService.GetUserLogo(int.Parse(userId));
+            var mimeType = $"image/{Path.GetExtension(path).Replace(".", "")}";
+            var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None, 4096,
+                FileOptions.DeleteOnClose);
+
+            return File(fileStream,
+                mimeType,
+                Path.GetFileName(path)
+            );
         }
     }
 }

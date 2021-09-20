@@ -63,7 +63,8 @@ namespace Persistence.Repositories
             user.LastName = updatedUser.LastName;
             user.Cell = updatedUser.Cell;
             user.Email = updatedUser.Email;
-            user.Logo = updatedUser.Logo;
+            user.LogoUrl = updatedUser.LogoUrl;
+            user.LogoName = updatedUser.LogoName;
             user.DefaultFee = updatedUser.DefaultFee;
 
             if (updatedUser.AccountDetails != null && updatedUser.AccountDetails.Any())

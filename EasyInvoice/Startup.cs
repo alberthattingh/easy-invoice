@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BusinessLogic;
+using BusinessLogic.Extensions;
+using BusinessLogic.Helpers;
 using BusinessLogic.Services;
-using EasyInvoice.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -24,17 +24,14 @@ namespace EasyInvoice
 {
     public class Startup
     {
-        private readonly string CONNECTION_STRING;
-        private readonly string SECRET;
+        private AppSettings AppSettings;
+        private IConfiguration Configuration { get; }
         
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            CONNECTION_STRING = Configuration["DB_CONNECTION"];
-            SECRET = Configuration["AUTH:SECRET"];
+            AppSettings = Configuration.Get<AppSettings>();
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -43,22 +40,21 @@ namespace EasyInvoice
             services.AddPersistence();
             services.AddBusinessLogic();
             // Add DI support for Configuration to get secrets and env variables
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(Configuration);
             
             // Get environment information
             Console.WriteLine("Environment: " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
             
             // Add database context for EF to use
             services.AddDbContext<EasyInvoiceContext>(options => 
-                options.UseMySql(CONNECTION_STRING, ServerVersion.AutoDetect(CONNECTION_STRING)));
+                options.UseMySql(AppSettings.DatabaseConnection, ServerVersion.AutoDetect(AppSettings.DatabaseConnection)));
             
-            var authSection = Configuration.GetSection("AUTH");
-            services.Configure<AppSettings>(authSection);
+            var appSettings = Configuration.Get<AppSettings>();
+            services.Configure<AppSettings>(Configuration);
+            services.AddSingleton(appSettings);
             
-            // configure jwt authentication
-            var appSettings = authSection.Get<AppSettings>();
             // var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            var key = Encoding.ASCII.GetBytes(SECRET ?? "");
+            var key = Encoding.ASCII.GetBytes(AppSettings.JwtToken);
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

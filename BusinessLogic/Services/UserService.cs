@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using BusinessLogic.Exceptions;
 using Persistence.Models;
 using Persistence.Repositories;
@@ -9,11 +13,13 @@ namespace BusinessLogic.Services
     {
         private readonly IUsersRepository UsersRepository;
         private readonly IHashing Hashing;
+        private readonly ICloudStorage CloudStorage;
 
-        public UserService(IUsersRepository usersRepository, IHashing hashing)
+        public UserService(IUsersRepository usersRepository, IHashing hashing, ICloudStorage cloudStorage)
         {
             UsersRepository = usersRepository;
             Hashing = hashing;
+            CloudStorage = cloudStorage;
         }
 
         public IList<User> GetAllUsers()
@@ -57,10 +63,40 @@ namespace BusinessLogic.Services
             UsersRepository.DeleteUserById(userId);
         }
 
-        public User UpdateUserDetails(User user, int userId)
+        public async Task<User> UpdateUserDetails(User user, int userId)
         {
             user.UserId = userId;
-            return UsersRepository.UpdateUser(user);
+
+            if (user.LogoImage != null)
+            {
+                user.LogoUrl = await UploadFile(user);
+                user.LogoName = user.LogoUrl
+                    .Split('/')
+                    .Last()
+                    .Split('?')
+                    .First();
+            }
+            
+            var updated = UsersRepository.UpdateUser(user);
+            updated.LogoImage = user.LogoImage;
+            return updated;
+        }
+
+        public async Task<string> GetUserLogo(int userId)
+        {
+            var user = UsersRepository.GetUserById(userId);
+            
+            var path = await CloudStorage.DownloadFileAsync(user.LogoName);
+            return path;
+        }
+
+        private async Task<string> UploadFile(User user)
+        {
+            var fileExtension = Path.GetExtension(user.LogoImage.FileName);
+            var fileNameForStorage = $"{user.FirstName}{user.LastName}-{DateTime.Now:yyyyMMddHHmmss}{fileExtension}";
+            
+            var url = await CloudStorage.UploadFileAsync(user.LogoImage, fileNameForStorage);
+            return url;
         }
     }
 }
