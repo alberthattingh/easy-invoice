@@ -11,13 +11,8 @@
     <ItemGroup>
       <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
       <PackageReference Include="Google.Cloud.Storage.V1" Version="3.5.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Http.Features, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\.dotnet\packs\Microsoft.AspNetCore.App.Ref\5.0.0\ref\net5.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>
