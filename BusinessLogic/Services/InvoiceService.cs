@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EasyInvoice.DTOs;
+using BusinessLogic.Enums;
+using System.IO;
+using BusinessLogic.Extensions;
 
 namespace BusinessLogic.Services
 {
@@ -11,11 +14,15 @@ namespace BusinessLogic.Services
     {
         private readonly IInvoiceRepository InvoiceRepository;
         private readonly ILessonsRepository LessonsRepository;
+        private readonly IPdfService PdfService;
+        private readonly IHandlebarsService HandlebarsService;
 
-        public InvoiceService(IInvoiceRepository invoiceRepository, ILessonsRepository lessonsRepository)
+        public InvoiceService(IInvoiceRepository invoiceRepository, ILessonsRepository lessonsRepository, IPdfService pdfService, IHandlebarsService handlebarsService)
         {
             InvoiceRepository = invoiceRepository;
             LessonsRepository = lessonsRepository;
+            PdfService = pdfService;
+            HandlebarsService = handlebarsService;
         }
 
         public Invoice CreateNewInvoice(int[] studentIds, DateTime? startDate, DateTime? endDate, string userId)
@@ -30,10 +37,14 @@ namespace BusinessLogic.Services
                 StartDate = start,
                 EndDate = end,
                 UserId = int.Parse(userId),
-                Total = lessons.Sum(lesson => (decimal) lesson.Duration * (decimal) lesson.Student.FeePayable),
+                Total = lessons.Sum(lesson => (decimal)lesson.Duration * (decimal)lesson.Student.FeePayable),
                 CreatedDate = DateTime.Now,
                 Lessons = lessons
             }, studentIds);
+
+            var invoiceHtml = HandlebarsService.InvoiceToHtml(invoice, Template.InvoiceTemplate1);
+            var invoiceUrl = PdfService.GeneratePdf(invoiceHtml);
+            invoice.InvoiceUrl = invoiceUrl;
 
             return invoice;
         }

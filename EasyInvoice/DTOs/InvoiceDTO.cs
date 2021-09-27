@@ -16,6 +16,7 @@ namespace EasyInvoice.DTOs
         public decimal Total { get; set; }
         public DateTime CreatedDate { get; set; }
         public IList<LessonDTO> Lessons { get; set; }
+        public string InvoiceUrl { get; set; }
 
         public InvoiceDTO(Invoice invoice)
         {
@@ -25,6 +26,7 @@ namespace EasyInvoice.DTOs
             EndDate = invoice.EndDate;
             Total = invoice.Total;
             CreatedDate = invoice.CreatedDate;
+            InvoiceUrl = invoice.InvoiceUrl;
 
             if (invoice.User != null)
                 User = new UserDTO(invoice.User);

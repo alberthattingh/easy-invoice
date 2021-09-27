@@ -16,6 +16,8 @@ namespace Persistence.ModelConfig
 
             builder.Property(invoice => invoice.CreatedDate)
                 .IsRequired();
+
+            builder.Ignore(invoice => invoice.InvoiceUrl);
         }
     }
 }

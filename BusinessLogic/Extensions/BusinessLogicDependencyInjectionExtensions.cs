@@ -14,6 +14,8 @@ namespace BusinessLogic.Extensions
             serviceCollection.AddScoped<IInvoiceService, InvoiceService>();
             serviceCollection.AddScoped<IHashing, Hashing>();
             serviceCollection.AddScoped<ICloudStorage, GoogleCloudStorage>();
+            serviceCollection.AddScoped<IPdfService, PdfService>();
+            serviceCollection.AddScoped<IHandlebarsService, HandlebarsService>();
             return serviceCollection;
         }
     }

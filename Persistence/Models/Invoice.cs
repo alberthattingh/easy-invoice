@@ -13,5 +13,6 @@ namespace Persistence.Models
         public decimal Total { get; set; }
         public IList<Lesson> Lessons { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string InvoiceUrl { get; set; }
     }
 }
