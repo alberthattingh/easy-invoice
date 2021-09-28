@@ -9,6 +9,7 @@ namespace EasyInvoice.DTOs
     public class InvoiceDTO
     {
         public int InvoiceId { get; set; }
+        public int InvoiceNumber { get; set; }
         public int UserId { get; set; }
         public UserDTO User { get; set; }
         public DateTime StartDate { get; set; }
@@ -21,6 +22,7 @@ namespace EasyInvoice.DTOs
         public InvoiceDTO(Invoice invoice)
         {
             InvoiceId = invoice.InvoiceId;
+            InvoiceNumber = invoice.InvoiceNumber;
             UserId = invoice.UserId;
             StartDate = invoice.StartDate;
             EndDate = invoice.EndDate;
