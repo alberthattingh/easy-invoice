@@ -19,6 +19,11 @@ namespace Persistence.Repositories
 
         public Invoice CreateNewInvoice(Invoice invoiceDetails, int[] studentIds)
         {
+            var invoiceNumber = Context.Set<Invoice>()
+                .Where(invoice => invoice.UserId == invoiceDetails.UserId)
+                .OrderByDescending(invoice => invoice.InvoiceNumber)
+                .FirstOrDefault()?.InvoiceNumber + 1 ?? 1;
+
             var invoice = new Invoice()
             {
                 StartDate = invoiceDetails.StartDate,
@@ -26,7 +31,8 @@ namespace Persistence.Repositories
                 UserId = invoiceDetails.UserId,
                 Total = invoiceDetails.Total,
                 CreatedDate = invoiceDetails.CreatedDate,
-                Lessons = invoiceDetails.Lessons
+                Lessons = invoiceDetails.Lessons,
+                InvoiceNumber = invoiceNumber,
             };
 
             Context.Set<Invoice>().Add(invoice);
@@ -51,7 +57,7 @@ namespace Persistence.Repositories
                 Context.SaveChanges();
                 throw new StudentNotFoundException("A student could not be found.", e);
             }
-            
+
 
             return invoice;
         }

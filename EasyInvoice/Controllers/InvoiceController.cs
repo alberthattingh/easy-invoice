@@ -59,8 +59,8 @@ namespace EasyInvoice.Controllers
         }
 
         [HttpPost("New")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InvoiceDTO))]
-        public ActionResult<InvoiceDTO> CreateNewInvoice(CreateInvoiceDTO invoiceDetails)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CreatedInvoiceDTO))]
+        public ActionResult<CreatedInvoiceDTO> CreateNewInvoice(CreateInvoiceDTO invoiceDetails)
         {
             string userId = User?.Identity?.Name;
             if (string.IsNullOrEmpty(userId))
@@ -72,13 +72,13 @@ namespace EasyInvoice.Controllers
             try
             {
                 Invoice invoice = InvoiceService.CreateNewInvoice(invoiceDetails.StudentIds, invoiceDetails.StartDate, invoiceDetails.EndDate, userId);
-                return Ok(new InvoiceDTO(invoice));
+                return Ok(new CreatedInvoiceDTO(invoice));
             }
             catch (StudentNotFoundException)
             {
                 return BadRequest("One or more students could not be found.");
             }
-            
+
         }
     }
 }

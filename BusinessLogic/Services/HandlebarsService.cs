@@ -29,7 +29,7 @@ namespace BusinessLogic.Services
                     var safeDate = DateTime.Parse(parameters[0].ToString()).ToLongDateString();
                     writer.WriteSafeString(safeDate);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     writer.WriteSafeString("");
                 }
