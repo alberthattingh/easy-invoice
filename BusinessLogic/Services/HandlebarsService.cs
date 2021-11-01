@@ -15,7 +15,7 @@ namespace BusinessLogic.Services
 
             string template = File.ReadAllText(templateId.ToDescription());
             var renderTemplate = Handlebars.Compile(template);
-            var result = renderTemplate(invoice);
+            var result = renderTemplate(new InvoiceTemplate1(invoice));
 
             return result;
         }
