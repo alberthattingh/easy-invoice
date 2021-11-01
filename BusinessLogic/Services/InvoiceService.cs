@@ -34,8 +34,8 @@ namespace BusinessLogic.Services
 
             Invoice invoice = InvoiceRepository.CreateNewInvoice(new Invoice()
             {
-                StartDate = start,
-                EndDate = end,
+                StartDate = new DateTime(start.Year, start.Month, start.Day, 0, 0, 0),
+                EndDate = new DateTime(end.Year, end.Month, end.Day, 23, 59, 59),
                 UserId = int.Parse(userId),
                 Total = lessons.Sum(lesson => (decimal)lesson.Duration * (decimal)lesson.Student.FeePayable),
                 CreatedDate = DateTime.Now,
