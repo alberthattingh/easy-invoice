@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Persistence.Models;
 
 namespace BusinessLogic.Services
@@ -11,7 +12,8 @@ namespace BusinessLogic.Services
         User Authenticate(string email, string password);
         User GetById(int userId);
         void DeleteUserById(int userId);
-        Task<User> UpdateUserDetails(User user, int userId);
+        User UpdateUserDetails(User user, int userId);
+        Task<User> UpdateUserLogo(IFormFile logo, int userId);
         Task<string> GetUserLogo(int userId);
     }
 }
