@@ -56,7 +56,7 @@ namespace EasyInvoice.Controllers
             var tokenString = tokenHandler.WriteToken(token);
 
             // return basic user info and authentication token
-            UserDTO userDto = new UserDTO(user) {Token = tokenString};
+            UserDTO userDto = new UserDTO(user) { Token = tokenString };
 
             return Ok(userDto);
         }
@@ -87,12 +87,12 @@ namespace EasyInvoice.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<UserDTO>> UpdateUserDetails([FromForm] User user)
+        public ActionResult<UserDTO> UpdateUserDetails([FromBody] User user)
         {
             string userId = User?.Identity?.Name;
             if (userId == null) return BadRequest("An error occurred. The user could not be updated.");
 
-            User updated = await UserService.UpdateUserDetails(user, int.Parse(userId));
+            User updated = UserService.UpdateUserDetails(user, int.Parse(userId));
             return Ok(new UserDTO(updated));
         }
 
@@ -104,6 +104,16 @@ namespace EasyInvoice.Controllers
 
             UserService.DeleteUserById(int.Parse(userId));
             return Ok();
+        }
+
+        [HttpPost("Logo")]
+        public async Task<ActionResult<UserDTO>> UpdateUserLogo([FromForm] LogoDTO logo)
+        {
+            string userId = User?.Identity?.Name;
+            if (userId == null) return BadRequest("An error occurred. The logo could not be updated.");
+
+            User updated = await UserService.UpdateUserLogo(logo.File, int.Parse(userId));
+            return Ok(new UserDTO(updated));
         }
 
         [HttpGet("Logo")]

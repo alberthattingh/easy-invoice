@@ -49,7 +49,7 @@ namespace Persistence.Repositories
         public void DeleteUserById(int userId)
         {
             var user = GetUserById(userId);
-            
+
             Context.Set<User>().Remove(user);
             Context.SaveChanges();
         }
@@ -57,15 +57,15 @@ namespace Persistence.Repositories
         public User UpdateUser(User updatedUser)
         {
             if (updatedUser.UserId == default) throw new UserNotFoundException();
-            var user = GetUserById((int) updatedUser.UserId);
-            
-            user.FirstName = updatedUser.FirstName;
-            user.LastName = updatedUser.LastName;
-            user.Cell = updatedUser.Cell;
-            user.Email = updatedUser.Email;
-            user.LogoUrl = updatedUser.LogoUrl;
-            user.LogoName = updatedUser.LogoName;
-            user.DefaultFee = updatedUser.DefaultFee;
+            var user = GetUserById((int)updatedUser.UserId);
+
+            user.FirstName = updatedUser.FirstName != null ? updatedUser.FirstName : user.FirstName;
+            user.LastName = updatedUser.LastName != null ? updatedUser.LastName : user.LastName;
+            user.Cell = updatedUser.Cell != null ? updatedUser.Cell : user.Cell;
+            user.Email = updatedUser.Email != null ? updatedUser.Email : user.Email;
+            user.LogoUrl = updatedUser.LogoUrl != null ? updatedUser.LogoUrl : user.LogoUrl;
+            user.LogoName = updatedUser.LogoName != null ? updatedUser.LogoName : user.LogoName;
+            user.DefaultFee = updatedUser.DefaultFee != null ? updatedUser.DefaultFee : user.DefaultFee;
 
             if (updatedUser.AccountDetails != null && updatedUser.AccountDetails.Any())
             {
@@ -77,7 +77,7 @@ namespace Persistence.Repositories
                 {
                     foreach (var account in user.AccountDetails)
                         account.IsActive = false;
-                    
+
                     user.AccountDetails.Add(updatedUser.AccountDetails.First());
                 }
             }
